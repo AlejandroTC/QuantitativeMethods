@@ -108,6 +108,12 @@ class App(customtkinter.CTk):
             for p in points:
                 ax.plot(p[0], p[1], 'r')
 
+            #Graficar el puntos
+            ax.scatter(max_x, max_y, color='blue')
+            # Agregar una etiqueta con el valor de min_x y min_y a la gráfica
+            ax.annotate(f"({max_x}, {max_y})", xy=(max_x, max_y), xytext=(max_x + 0.2, max_y + 0.2), fontsize=8, color='blue')
+
+            
             # Destruir la figura anterior, si existe
             for widget in self.frame2.winfo_children():
                 widget.destroy()
@@ -115,7 +121,7 @@ class App(customtkinter.CTk):
             # Agregar la figura al widget de la gráfica
             canvas = FigureCanvasTkAgg(fig, master=self.frame2)
             canvas.draw()
-            canvas.get_tk_widget().pack(side=customtkinter.TOP, fill=customtkinter.BOTH, expand=True)
+            canvas.get_tk_widget().pack(side=customtkinter.TOP, fill=customtkinter.BOTH, expand=False)
             concluir_maximizacion(max_x, max_y)
 
         # Concluir minimizacion
@@ -153,7 +159,7 @@ class App(customtkinter.CTk):
 
             # Obtener el punto mínimo
             min_x, min_y = res.x
-
+           
             # Crear una lista de puntos para graficar las restricciones
             points = []
             for i in range(n):
@@ -167,8 +173,14 @@ class App(customtkinter.CTk):
 
             # Graficar las restricciones
             fig, ax = plt.subplots()
+            
             for p in points:
                 ax.plot(p[0], p[1], 'r')
+            
+            #Graficar el puntos
+            ax.scatter(min_x, min_y, color='blue')
+            # Agregar una etiqueta con el valor de min_x y min_y a la gráfica
+            ax.annotate(f"({min_x}, {min_y})", xy=(min_x, min_y), xytext=(min_x + 0.2, min_y + 0.2), fontsize=8, color='blue')
 
             # Destruir la figura anterior, si existe
             for widget in self.frame2.winfo_children():
@@ -177,7 +189,7 @@ class App(customtkinter.CTk):
             # Agregar la figura al widget de la gráfica
             canvas = FigureCanvasTkAgg(fig, master=self.frame2)
             canvas.draw()
-            canvas.get_tk_widget().pack(side=customtkinter.TOP, fill=customtkinter.BOTH, expand=True)
+            canvas.get_tk_widget().pack(side=customtkinter.TOP, fill=customtkinter.BOTH, expand=False)
             concluir_minimizacion(min_x, min_y)
 
         # Concluir minimizacion
@@ -197,6 +209,7 @@ class App(customtkinter.CTk):
         restrs = []  # Guardar las label para eliminarlas
         restr_entrys = []  # Guardar las entradas para eliminarlas o leerlas
 
+        #Generar los campos de las restricciones
         def generar_restricciones():
             n_str = self.num_restr_entry.get()  # Obtener el valor de n
             eliminar_etiquetas()  # Limpiar todas las restricciones
@@ -269,7 +282,7 @@ class App(customtkinter.CTk):
         self.button_eliminar.grid(row=5, column=2, columnspan=3, padx=2, pady=5)
 
         # Crear los widgets de la columna 3
-        self.text_area = customtkinter.CTkTextbox(self.frame3, height=300, width=500)
+        self.text_area = customtkinter.CTkTextbox(self.frame3, height=300, width=500, font=("Arial", 20), state="disabled")
         self.text_area.pack(side=customtkinter.TOP, pady=5)
 
 
