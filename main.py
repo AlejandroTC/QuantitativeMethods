@@ -50,14 +50,14 @@ class App(customtkinter.CTk):
         self.z_label = customtkinter.CTkLabel(self.frame1, text="Z = ")
         self.z_label.grid(row=2, column=0, padx=10, pady=10)
         # ingresar la funcion en x1
-        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X1") # Tamayo, esta variable
+        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X1") 
         self.x1_entry.grid(row=2, column=1, padx=10, pady=10)
             
         # Mas
         self.mas_label = customtkinter.CTkLabel(self.frame1, text="X1 +")
         self.mas_label.grid(row=2, column=2, padx=10, pady=10)
         # ingresar la funcion en x2
-        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X2") # Tamayo esta otra variable
+        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X2") 
         self.x2_entry.grid(row=2, column=3, padx=10, pady=10)
 
         # Graficar Maximizacion
@@ -85,7 +85,7 @@ class App(customtkinter.CTk):
             b = np.array(c_list)
 
             # Definir la función objetivo a maximizar
-            c = np.array([x1, x2]) # Tamayo, Sustituyes los 1's por las variabels de la funcion objetivo x1, x2
+            c = np.array([x1, x2]) 
 
             # Resolver el problema de programación lineal con el método Simplex
             res = solve_lp(c, A, b)
@@ -146,7 +146,7 @@ class App(customtkinter.CTk):
             b = np.array(c_list)
 
             # Definir la función objetivo a minimizar
-            c = np.array([1, 1]) # Tamayo, Sustituyes los 1's por las variabels de la funcion objetivo x1, x2
+            c = np.array([x1, x2]) 
 
             # Resolver el problema de programación lineal con el método Simplex
             res = linprog(c, A_ub=-A, b_ub=-b, bounds=(0, None), method='highs')
