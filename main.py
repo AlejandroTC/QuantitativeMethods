@@ -1,7 +1,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import CTkMessagebox
+from CTkMessagebox import CTkMessagebox
 from matplotlib import pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -24,15 +24,57 @@ class App(customtkinter.CTk):
                 switch_text.set("Minimización")
                 # Funcion a minimizar
 
+        # Ventana
+        self.title("Método Gráfico")
+        self.geometry("1500x400")
+        # Crear los marcos
+        self.frame1 = customtkinter.CTkFrame(self, border_width=2)
+        self.frame1.grid(row=0, column=0, sticky="nsew")
+        self.frame2 = customtkinter.CTkFrame(self, border_width=2)
+        self.frame2.grid(row=0, column=1, sticky="nsew")
+        self.frame3 = customtkinter.CTkFrame(self, border_width=2)
+        self.frame3.grid(row=0, column=2, sticky="nsew")
+
+        # Switch para cambiar entre el modo Maximizacion y Minimizacion
+        switch_var = customtkinter.StringVar(value="on")
+        switch_text = customtkinter.StringVar(value="Maximización")
+        switch = customtkinter.CTkSwitch(master=self.frame1, textvariable=switch_text, command=cambiar_modos,
+                                         variable=switch_var, onvalue="on", offvalue="off")
+        switch.grid(row=0, column=0, columnspan=4, padx=10, pady=5)
+
+        # Label para saber el modo
+        cambiar_modos()
+        self.label = customtkinter.CTkLabel(self.frame1, text="Función")
+        self.label.grid(row=1, column=0, columnspan=4, padx=10, pady=1)
+        # Ingresar la funcion en Z
+        self.z_label = customtkinter.CTkLabel(self.frame1, text="Z = ")
+        self.z_label.grid(row=2, column=0, padx=10, pady=10)
+        # ingresar la funcion en x1
+        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X1") # Tamayo, esta variable
+        self.x1_entry.grid(row=2, column=1, padx=10, pady=10)
+            
+        # Mas
+        self.mas_label = customtkinter.CTkLabel(self.frame1, text="X1 +")
+        self.mas_label.grid(row=2, column=2, padx=10, pady=10)
+        # ingresar la funcion en x2
+        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X2") # Tamayo esta otra variable
+        self.x2_entry.grid(row=2, column=3, padx=10, pady=10)
+
         # Graficar Maximizacion
         def graficar_maximizacion():
             limpiar()
             obtener_valores()
+            
+            #Obtener los valores de la funcion objetivo
             n = int(self.num_restr_entry.get())  # Guardar el valor de n
-
+            x1_valor = self.x1_entry.get()
+            x1 = int(x1_valor)
+            x2_valor = self.x2_entry.get()
+            x2 = int(x2_valor)
+            
             def solve_lp(c, A, b):
-                res = linprog(-c, A_ub=A, b_ub=b, bounds=(0, None), method='highs')
-                return res
+                resmax = linprog(-c, A_ub=A, b_ub=b, bounds=(0, None), method='highs')
+                return resmax
 
             # Crear una figura de matplotlib
             fig = plt.Figure(figsize=(5, 4), dpi=100)
@@ -43,7 +85,7 @@ class App(customtkinter.CTk):
             b = np.array(c_list)
 
             # Definir la función objetivo a maximizar
-            c = np.array([1, 1])
+            c = np.array([x1, x2]) # Tamayo, Sustituyes los 1's por las variabels de la funcion objetivo x1, x2
 
             # Resolver el problema de programación lineal con el método Simplex
             res = solve_lp(c, A, b)
@@ -78,7 +120,7 @@ class App(customtkinter.CTk):
 
         # Concluir minimizacion
         def concluir_maximizacion(max_x=float, max_y=float):
-            conclusiones = f"Punto máximo: ({round(max_x)}, {round(max_y)})"
+            conclusiones = f"Punto máximo: ({round(max_x,2)}, {round(max_y,2)})"
             self.text_area.delete('1.0', customtkinter.END)
             self.text_area.insert(customtkinter.END, conclusiones)
 
@@ -88,6 +130,13 @@ class App(customtkinter.CTk):
             obtener_valores()
             n = int(self.num_restr_entry.get())  # Guardar el valor de n
 
+            #Obtener los valores de la funcion objetivo
+            n = int(self.num_restr_entry.get())  # Guardar el valor de n
+            x1_valor = self.x1_entry.get()
+            x1 = int(x1_valor)
+            x2_valor = self.x2_entry.get()
+            x2 = int(x2_valor)
+            
             # Crear una figura de matplotlib
             fig = plt.Figure(figsize=(5, 4), dpi=100)
             ax = fig.add_subplot(111)
@@ -97,7 +146,7 @@ class App(customtkinter.CTk):
             b = np.array(c_list)
 
             # Definir la función objetivo a minimizar
-            c = np.array([1, 1])
+            c = np.array([1, 1]) # Tamayo, Sustituyes los 1's por las variabels de la funcion objetivo x1, x2
 
             # Resolver el problema de programación lineal con el método Simplex
             res = linprog(c, A_ub=-A, b_ub=-b, bounds=(0, None), method='highs')
@@ -136,42 +185,7 @@ class App(customtkinter.CTk):
             conclusiones = f"Punto mínimo: ({round(min_x)}, {round(min_y)})"
             self.text_area.delete('1.0', customtkinter.END)
             self.text_area.insert(customtkinter.END, conclusiones)
-
-        # Ventana
-        self.title("Método Gráfico")
-        self.geometry("1500x400")
-        # Crear los marcos
-        self.frame1 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame1.grid(row=0, column=0, sticky="nsew")
-        self.frame2 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame2.grid(row=0, column=1, sticky="nsew")
-        self.frame3 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame3.grid(row=0, column=2, sticky="nsew")
-
-        # Switch para cambiar entre el modo Maximizacion y Minimizacion
-        switch_var = customtkinter.StringVar(value="on")
-        switch_text = customtkinter.StringVar(value="Maximización")
-        switch = customtkinter.CTkSwitch(master=self.frame1, textvariable=switch_text, command=cambiar_modos,
-                                         variable=switch_var, onvalue="on", offvalue="off")
-        switch.grid(row=0, column=0, columnspan=4, padx=10, pady=5)
-
-        # Label para saber el modo
-        cambiar_modos()
-        self.label = customtkinter.CTkLabel(self.frame1, text="Función")
-        self.label.grid(row=1, column=0, columnspan=4, padx=10, pady=1)
-        # Ingresar la funcion en Z
-        self.z_label = customtkinter.CTkLabel(self.frame1, text="Z = ")
-        self.z_label.grid(row=2, column=0, padx=10, pady=10)
-        # ingresar la funcion en x1
-        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X1")
-        self.x1_entry.grid(row=2, column=1, padx=10, pady=10)
-        # Mas
-        self.mas_label = customtkinter.CTkLabel(self.frame1, text="X1 +")
-        self.mas_label.grid(row=2, column=2, padx=10, pady=10)
-        # ingresar la funcion en x2
-        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X2")
-        self.x2_entry.grid(row=2, column=3, padx=10, pady=10)
-
+        
         # numero de restricciones
         self.num_restr_label = customtkinter.CTkLabel(self.frame1, text="Cantidad de Restricciones")
         self.num_restr_label.grid(row=3, column=0, columnspan=4, padx=2, pady=5)
