@@ -1,13 +1,32 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-from CTkMessagebox import CTkMessagebox
+import CTkMessagebox
+from CTkMessagebox import CTkMessagebox as CtkMessagebox
+from PIL import ImageTk, Image
 from matplotlib import pyplot as plt
 import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.optimize import linprog
+import os
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
+
+class ToplevelWindow(customtkinter.CTkToplevel):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.geometry("400x300")
+        self.materia = customtkinter.CTkLabel(self, text="Métodos Cuantitativos para la Toma de Decisiones")
+        self.materia.pack(padx=20, pady=20)
+        self.alumnos = customtkinter.CTkLabel(self, text="Alumnos: ")
+        self.alumnos.pack(padx=20, pady=20)
+        self.name1 = customtkinter.CTkLabel(self, text="Daniel Michelle Tovar Ponce")
+        self.name1.pack(padx=20, pady=5)
+        self.name2 = customtkinter.CTkLabel(self, text="Arnold Torres Maldonado")
+        self.name2.pack(padx=20, pady=5)
+        self.name3 = customtkinter.CTkLabel(self, text="Alejandro Tamayo Castro")
+        self.name3.pack(padx=20, pady=5)
+        self.wm_attributes("-topmost", True)
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -40,6 +59,23 @@ class App(customtkinter.CTk):
         switch = customtkinter.CTkSwitch(master=self.frame1, textvariable=switch_text, variable=switch_var, onvalue="on", offvalue="off", command=cambiar_modos)
         switch.grid(row=0, column=0, padx=10, pady=10)
         self.frame1.columnconfigure(0, weight=1)    #Configura que la colunma 0 tenga un weight especifico
+        
+        #Boton para una ventana con nuestra info
+        self.toplevel_window = None
+        def open_toplevel():
+            if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+                self.toplevel_window = ToplevelWindow()  # create window if its None or destroyed
+            else:
+                self.toplevel_window.focus()  # if window exists focus it
+        
+        ruta_icono = os.path.join(CTkMessagebox.__path__[0], 'icons', 'info.png')
+        # cargar la imagen
+        img = Image.open(ruta_icono)
+        img_resized = img.resize((15, 15))
+        photo = customtkinter.CTkImage(img_resized)
+        self.info = customtkinter.CTkButton(self.frame1, image=photo, fg_color="transparent", text='', width=20, height=20, command=open_toplevel)
+        self.info.grid(row=0, column=0, padx=2, pady=5, sticky='w')
+        
         
         #Label para funcion objetivo
         self.label = customtkinter.CTkLabel(self.frame1, text="Función Objetivo")
@@ -262,7 +298,7 @@ class App(customtkinter.CTk):
                     generar_restr.grid(row=0, column=0, padx=10, pady=5, sticky="ns")
                     restrs.append(generar_restr)
             else:
-                CTkMessagebox(title="Error", message="El número de restricciones no es un numero valido", icon="cancel")
+                CtkMessagebox(title="Error", message="El número de restricciones no es un numero valido", icon="cancel")
         #Eliminar 
         def eliminar_etiquetas():
             for restr in restrs:
@@ -284,12 +320,16 @@ class App(customtkinter.CTk):
         #Funcion para obtener los valores
         def obtener_valores():
             for restr_entry in restr_entrys:
-                a = int(restr_entry[0].get())
-                b = int(restr_entry[1].get())
-                c = int(restr_entry[2].get())
-                a_list.append(a)
-                b_list.append(b)
-                c_list.append(c)
+                if restr_entry[0].get().isdigit() and restr_entry[0].get().isdigit() and restr_entry[0].get().isdigit() : 
+                    a = int(restr_entry[0].get())
+                    b = int(restr_entry[1].get())
+                    c = int(restr_entry[2].get())
+                    a_list.append(a)
+                    b_list.append(b)
+                    c_list.append(c)
+                else:
+                    CtkMessagebox(title="Error", message="Asegurese de ingresar numeros positivos", icon="cancel")
+                    
         # Crear un sub-frame para las restricciones
         restrbutton_frame = customtkinter.CTkFrame(self.frame1, fg_color="transparent")
         restrbutton_frame.grid(row=4, column=0, columnspan=5, padx=10, pady=10)
