@@ -102,16 +102,20 @@ class App(customtkinter.CTk):
             self.text_area.delete('1.0', customtkinter.END)
             self.text_area.insert(customtkinter.END, conclusiones)
         
+        # Crear los marcos
+        self.frame1 = customtkinter.CTkFrame(self, border_width=2, width=500, height=200)
+        self.frame1.grid(row=0, column=0, sticky="nsew")
+        self.frame2 = customtkinter.CTkFrame(self, border_width=2, width=500, height=300)
+        self.frame2.grid(row=0, column=1, sticky="nsew")
+        self.frame3 = customtkinter.CTkFrame(self, border_width=2, width=1000, height=300)
+        self.frame3.grid(row=1, column=0, columnspan="2", sticky="nsew")
+        
         #Ventana
         self.title("Método Gráfico")
-        self.geometry("1500x400")
-        # Crear los marcos
-        self.frame1 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame1.grid(row=0, column=0, sticky="nsew")
-        self.frame2 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame2.grid(row=0, column=1, sticky="nsew")
-        self.frame3 = customtkinter.CTkFrame(self, border_width=2)
-        self.frame3.grid(row=0, column=2, sticky="nsew")
+        # Configurar el tamaño de la ventana para contener los tres frames
+        width = max(self.frame1.winfo_reqwidth(), self.frame2.winfo_reqwidth(), self.frame3.winfo_reqwidth())
+        height = sum([self.frame1.winfo_reqheight(), self.frame2.winfo_reqheight(), self.frame3.winfo_reqheight()])
+        self.geometry("{}x{}".format(width, height))
         
         #Switch para cambiar entre el modo Maximizacion y Minimizacion
         switch_var = customtkinter.StringVar(value="on")
@@ -119,27 +123,36 @@ class App(customtkinter.CTk):
         switch = customtkinter.CTkSwitch(master=self.frame1, textvariable=switch_text, command=cambiar_modos, variable=switch_var, onvalue="on", offvalue="off")
         switch.grid(row=0, column=0, columnspan=4, padx=10, pady=5)
         
-        
+        self.frame1.columnconfigure(2, minsize=30)
         #Label para saber el modo
         cambiar_modos()
-        self.label = customtkinter.CTkLabel(self.frame1, text="Función")
-        self.label.grid(row=1,  column=0, columnspan=4, padx=10, pady=1)
-        #Ingresar la funcion en Z
-        self.z_label = customtkinter.CTkLabel(self.frame1, text="Z = ")
+        self.label = customtkinter.CTkLabel(self.frame1, text="Función Objetivo")
+        self.label.grid(row=1, column=0, columnspan=5, padx=10, pady=10)
+        
+        #Label para Z
+        self.z_label = customtkinter.CTkLabel(self.frame1, text="Z =")
         self.z_label.grid(row=2, column=0, padx=10, pady=10)
-        #ingresar la funcion en x1
-        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X1")
-        self.x1_entry.grid(row=2, column=1, padx=10, pady=10)
-        #Mas
+        
+        #Entry para x1
+        self.x1_entry = customtkinter.CTkEntry(self.frame1, width=40, placeholder_text="X1")
+        self.x1_entry.grid(row=2, column=1, padx=5, pady=10)
+        
+        #Label para X1 y Mas
         self.mas_label = customtkinter.CTkLabel(self.frame1, text="X1 +")
-        self.mas_label.grid(row=2, column=2, padx=10, pady=10)
-        #ingresar la funcion en x2
-        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=50, placeholder_text="X2")
-        self.x2_entry.grid(row=2, column=3, padx=10, pady=10)
+        self.mas_label.grid(row=2, column=2, padx=5, pady=10)
+        
+        #Entry para x2
+        self.x2_entry = customtkinter.CTkEntry(self.frame1, width=40, placeholder_text="X2")
+        self.x2_entry.grid(row=2, column=3, padx=5, pady=10)
+        
+        #Label para X2
+        self.mas_label = customtkinter.CTkLabel(self.frame1, text="X2")
+        self.mas_label.grid(row=2, column=4, padx=10, pady=10)
         
         #numero de restricciones
         self.num_restr_label = customtkinter.CTkLabel(self.frame1, text="Cantidad de Restricciones")
         self.num_restr_label.grid(row=3, column=0, columnspan=4, padx=2, pady=5)
+        
         #n restricciones
         self.num_restr_entry = customtkinter.CTkEntry(self.frame1, placeholder_text="n")
         self.num_restr_entry.grid(row=4, column=0, columnspan=4, padx=2, pady=5)
@@ -216,7 +229,7 @@ class App(customtkinter.CTk):
         self.button_eliminar.grid(row=5, column=2, columnspan=3, padx=2, pady=5)
         
         # Crear los widgets de la columna 3
-        self.text_area = customtkinter.CTkTextbox(self.frame3, height=300, width=500)
+        self.text_area = customtkinter.CTkTextbox(self.frame3, height=300, width=1000)
         self.text_area.pack(side=customtkinter.TOP, pady=5)
             
 if __name__ == "__main__":
