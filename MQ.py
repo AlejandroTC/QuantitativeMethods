@@ -79,7 +79,7 @@ def mostrar_campos(n):
 
             # Guardamos los campos de entrada en una lista
             campos_entrada = [espacio1, espacio2, espacio3]
-
+    
             # Función para obtener los valores de los campos de entrada
             def obtener_valores():
                 a = int(campos_entrada[0].get())
