@@ -4,7 +4,6 @@ class ColorBox(tk.Canvas):
   
   def __init__(self, parent, *args, **kwargs):
     tk.Canvas.__init__(self, parent, *args, **kwargs)
-    self.configure(width=100, height=100) # ajusta el tamaño del cuadro
     self.red = 0
     self.green = 0
     self.blue = 0
@@ -21,7 +20,7 @@ class ColorBox(tk.Canvas):
     self.blue = blue
     self.draw()
 
-class ColorPicker(tk.Frame):
+class ventana(tk.Frame):
   
   def __init__(self, parent, *args, **kwargs):
     tk.Frame.__init__(self, parent, *args, **kwargs)
@@ -55,6 +54,6 @@ class ColorPicker(tk.Frame):
 
 if __name__ == "__main__":
   root = tk.Tk()
-  root.title("Color Picker")
-  picker = ColorPicker(root)
+  root.title("Ventana de Colores")
+  picker = ventana(root)
   root.mainloop()

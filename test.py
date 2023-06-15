@@ -32,8 +32,6 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         self.name3.pack(padx=20, pady=5)
         self.wm_attributes("-topmost", True)
 
-
-
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -44,10 +42,18 @@ class App(customtkinter.CTk):
         # Crear pestañas en el CTkTabview
         tab1 = tabview.add("Tab 1")
         tab2 = tabview.add("Tab 2")
+
         # Función para obtener la pestaña activa
         def get_active_tab():
             active_tab = tabview.get()
             print("Pestaña activa:", active_tab)
+
+        #Función para detectar el cambio de pestaña
+        def on_tab_change(event):
+            print("Se cambió de pestaña")
+
+        # Enlazar el evento de cambio de pestaña a la función de manejo de eventos
+        tabview.bind("<TabChanged>", on_tab_change)
 
         # Botón para obtener la pestaña activa
         button = customtkinter.CTkButton(self, text="Obtener pestaña activa", command=get_active_tab)
