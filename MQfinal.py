@@ -121,22 +121,28 @@ class App(customtkinter.CTk):
                 if b_list[i] != 0:
                     x = [c_list[i] / a_list[i], 0]
                     y = [0, c_list[i] / b_list[i]]
-                else:
+                else:   
                     x = [c_list[i] / a_list[i], c_list[i] / a_list[i]]
                     y = [0, 10]
                 points.append((x, y))
 
 
-            # Graficar las restricciones
-            for i, p in enumerate(points):
+            active_tab = tabview.get()
+            if active_tab == "Método Dual":
+                start_index = 1
+            else:
+                start_index = 0
+
+            for i, p in enumerate(points[start_index:], start=start_index):
                 ax.plot(p[0], p[1], color=colors[i])
-
+                ax.fill_between(p[0], p[1], np.max(y)*4, color=colors[i], alpha=0.3)
+            ax.set_ylim(bottom=0, top=np.max(y))
+            ax.set_xlim(left=0, right=np.max(x))
             # Graficar el puntos
-            ax.scatter(max_x, max_y, color='blue')
+            ax.scatter(max_x, max_y, color='black')
             # Agregar una etiqueta con el valor de min_x y min_y a la gráfica
-            ax.annotate(f"({round(max_x,2)}, {round(max_y,2)})", xy=(max_x, max_y), xytext=(max_x + 0.2, max_y + 0.2), fontsize=8,
-                        color='blue')
-
+            ax.annotate(f"({round(max_x,2)}, {round(max_y,2)})", xy=(max_x, max_y), xytext=(max_x - 1, max_y - 1), fontsize=10,color='black')
+            
             # Destruir la figura anterior, si existe
             active_tab = tabview.get()
             if(active_tab == "Método Dual"):
@@ -200,13 +206,22 @@ class App(customtkinter.CTk):
             # Graficar las restricciones
             fig, ax = plt.subplots()
 
-            for i, p in enumerate(points):
-                ax.plot(p[0], p[1], color=colors[i])
+            active_tab = tabview.get()
+            if active_tab == "Método Dual":
+                start_index = 1
+            else:
+                start_index = 0
 
+            for i, p in enumerate(points[start_index:], start=start_index):
+                ax.plot(p[0], p[1], color=colors[i])
+                ax.fill_between(p[0], p[1], color=colors[i], alpha=0.3)
+
+            ax.set_ylim(bottom=0, top=np.max(y))
+            ax.set_xlim(left=0, right=np.max(x))
             # Graficar el puntos
-            ax.scatter(min_x, min_y, color='blue')
+            ax.scatter(min_x, min_y, color='black')
             # Agregar una etiqueta con el valor de min_x y min_y a la gráfica
-            ax.annotate(f"({round(min_x,2)}, {round(min_y,2)})", xy=(min_x, min_y), xytext=(min_x + 0.2, min_y + 0.2), fontsize=8,color='blue')
+            ax.annotate(f"({round(min_x,2)}, {round(min_y,2)})", xy=(min_x, min_y), xytext=(min_x + 0.2, min_y + 0.2), fontsize=10,color='black')
 
             # Destruir la figura anterior, si existe
             active_tab = tabview.get()
