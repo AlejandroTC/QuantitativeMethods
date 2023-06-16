@@ -481,8 +481,7 @@ class App(customtkinter.CTk):
                 c_list_dual.append(int(x3_entry.get()))
 
         # Crear los widgets de la columna 3
-        self.text_area = customtkinter.CTkTextbox(
-            self.frame3, height=200, width=500, font=("Arial", 20))
+        self.text_area = customtkinter.CTkTextbox(self.frame3, height=200, width=500, font=("Arial", 20))
         self.text_area.pack(side=customtkinter.TOP, pady=5)
 
 
